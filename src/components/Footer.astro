@@ -1,0 +1,99 @@
+---
+import { navigatie, site } from '../data/site';
+const jaar = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap grid">
+    <div class="brand">
+      <p class="name">Het Getehof</p>
+      <p>
+        B&amp;B en vakantiewoning in {site.dorp} ({site.gemeente}), in het groene {site.streek}. Sinds {site.geopendIn} ontvangen{" "}
+        {site.uitbaters} er gasten die rust zoeken.
+      </p>
+    </div>
+    <div>
+      <p class="label">Contact</p>
+      <ul>
+        <li><a href={`tel:${site.telefoonE164}`}>{site.telefoon}</a></li>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li>{site.straat ? `${site.straat}, ` : ''}{site.postcode} {site.dorp} ({site.gemeente})</li>
+        <li><a href={site.mapsUrl} rel="noopener" target="_blank">Route in Google Maps</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="label">Pagina's</p>
+      <ul>
+        {navigatie.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        <li><a href="/boeken">Prijs &amp; boeken</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap bottom">
+    <p>© {jaar} {site.naam}</p>
+    <p>Website door <a href={site.maker.url}>{site.maker.naam}</a></p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--ink);
+    color: #d9ddd3;
+    padding-top: clamp(56px, 8vw, 96px);
+    font-size: 0.95rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 48px;
+  }
+  .name {
+    font-family: var(--serif);
+    font-size: 2rem;
+    color: var(--white);
+    margin-bottom: 0.4em;
+  }
+  .brand p:not(.name) {
+    max-width: 38ch;
+    opacity: 0.8;
+  }
+  .label {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--khaki);
+    font-weight: 600;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  a {
+    color: #eef0ea;
+    text-decoration-color: rgb(158 146 110 / 60%);
+    overflow-wrap: anywhere;
+  }
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    border-top: 1px solid rgb(255 255 255 / 10%);
+    margin-top: 56px;
+    padding-block: 24px;
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+  .bottom p {
+    margin: 0;
+  }
+  @media (max-width: 760px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>

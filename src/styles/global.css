@@ -1,0 +1,401 @@
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/inter';
+
+/*
+ * Kleuren komen uit het oude WordPress-thema (finedine + custom background):
+ * #171C12 als donkere tekstkleur, #9E926E als accent, #d0d8cb als salie-achtergrond.
+ * Die drie blijven; de rest zijn tinten ervan.
+ */
+:root {
+  --ink: #171c12;
+  --ink-soft: #3b4234;
+  --muted: #5d6455;
+  --khaki: #9e926e;
+  --khaki-deep: #6f6443; /* khaki met genoeg contrast voor tekst op licht */
+  --khaki-light: #e9e4d4;
+  --sage: #d0d8cb;
+  --sage-soft: #e6ebe2;
+  --paper: #f7f6f0;
+  --white: #fffefb;
+  --forest: #232a1c;
+
+  --serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius: 18px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 2px rgb(23 28 18 / 6%), 0 12px 32px -12px rgb(23 28 18 / 22%);
+  --wrap: 1180px;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  font-feature-settings: 'ss01', 'cv11';
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--serif);
+  font-weight: 450;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5em;
+  font-variation-settings: 'SOFT' 60, 'opsz' 96;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+}
+h2 {
+  font-size: clamp(1.9rem, 3.8vw, 3rem);
+}
+h3 {
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+}
+
+p {
+  margin: 0 0 1em;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--khaki);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--khaki-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--wrap));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(64px, 10vw, 128px);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--khaki-deep);
+  margin-bottom: 1rem;
+}
+
+.lead {
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.95em 1.5em;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+  font-family: var(--sans);
+  line-height: 1.2;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn-primary {
+  background: var(--ink);
+  color: var(--white);
+}
+.btn-primary:hover {
+  background: var(--forest);
+}
+.btn-light {
+  background: var(--white);
+  color: var(--ink);
+}
+.btn-ghost {
+  border-color: currentColor;
+  color: inherit;
+  background: transparent;
+}
+.btn svg {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Paginakop voor binnenpagina's */
+.page-head {
+  padding-top: clamp(120px, 16vw, 180px);
+  padding-bottom: clamp(32px, 5vw, 56px);
+}
+.page-head p {
+  max-width: 62ch;
+}
+
+.breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+.breadcrumbs a {
+  color: inherit;
+}
+
+/* Tekstblokken */
+.prose {
+  max-width: 68ch;
+}
+.prose h2 {
+  margin-top: 1.6em;
+  font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+}
+.prose h3 {
+  margin-top: 1.4em;
+}
+
+/* Lichte animatie bij het binnenscrollen */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 22%;
+  }
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+}
+
+/* Formulieren (boeken en gastenboek), verstuurd via Netlify Forms */
+.form-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: clamp(24px, 4vw, 44px);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 22px;
+}
+.field {
+  display: grid;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.field > label,
+.field > legend {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0;
+}
+.field .opt {
+  font-weight: 400;
+  color: var(--muted);
+}
+.field input:not([type='radio']):not([type='checkbox']),
+.field textarea {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid rgb(23 28 18 / 18%);
+  border-radius: 12px;
+  padding: 0 16px;
+  height: 52px;
+  width: 100%;
+  min-width: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.field textarea {
+  height: auto;
+  min-height: 120px;
+  padding: 14px 16px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #8a8f82;
+}
+.field input:hover,
+.field textarea:hover {
+  border-color: rgb(23 28 18 / 35%);
+}
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--khaki-deep);
+  box-shadow: 0 0 0 3px rgb(158 146 110 / 28%);
+}
+.field input[type='date'] {
+  display: flex;
+  align-items: center;
+}
+.field input[type='date']::-webkit-calendar-picker-indicator {
+  margin-left: auto;
+  opacity: 0.55;
+  cursor: pointer;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+/* Keuzeknoppen in plaats van keuzelijsten */
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.choices label {
+  position: relative;
+  cursor: pointer;
+}
+.choices input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+.choices span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgb(23 28 18 / 18%);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  background: var(--white);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.choices label:hover span {
+  border-color: rgb(23 28 18 / 40%);
+}
+.choices input:checked + span {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+.choices input:focus-visible + span {
+  box-shadow: 0 0 0 3px rgb(158 146 110 / 45%);
+}
+.check {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.check input {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--ink);
+  flex: none;
+}
+.form-card .btn {
+  justify-content: center;
+  height: 54px;
+  font-size: 1rem;
+}
+.form-hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+}
+.form-error {
+  color: #8a3a26;
+  font-size: 0.9rem;
+  margin: 0;
+}
+.hp {
+  position: absolute;
+  left: -9999px;
+}
+@media (max-width: 480px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}

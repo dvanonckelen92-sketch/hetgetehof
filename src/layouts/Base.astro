@@ -1,0 +1,138 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import { bedrijfSchema } from '../data/schema';
+
+interface Props {
+  /** Zoekterm-titel zonder merksuffix, maximaal 45 tekens. */
+  title: string;
+  description: string;
+  /** Kruimelpad, zonder de homepage. */
+  crumbs?: { name: string; href: string }[];
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+  overlayHeader?: boolean;
+  ogImage?: string;
+}
+
+const { title, description, crumbs = [], schema = [], noindex = false, overlayHeader = false, ogImage } = Astro.props;
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', site.url).href;
+const fullTitle = `${title} | ${site.naam}`;
+const og = new URL(ogImage ?? '/og.jpg', site.url).href;
+
+const graph: Record<string, unknown>[] = [
+  bedrijfSchema,
+  {
+    '@type': 'WebPage',
+    '@id': `${canonical}#webpage`,
+    url: canonical,
+    name: fullTitle,
+    description,
+    inLanguage: 'nl-BE',
+    isPartOf: { '@type': 'WebSite', '@id': `${site.url}/#website`, name: site.naam, url: site.url },
+    about: { '@id': `${site.url}/#bnb` },
+  },
+  ...(crumbs.length
+    ? [
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [{ name: 'Home', href: '/' }, ...crumbs].map((c, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: c.name,
+            item: new URL(c.href, site.url).href,
+          })),
+        },
+      ]
+    : []),
+  ...schema,
+];
+---
+
+<!doctype html>
+<html lang="nl-BE">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#171c12" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_BE" />
+    <meta property="og:site_name" content={site.naam} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={og} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
+  </head>
+  <body>
+    <a class="skip visually-hidden" href="#inhoud">Naar de inhoud</a>
+    <Header overlay={overlayHeader} />
+    <main id="inhoud">
+      {
+        crumbs.length > 0 && (
+          <nav class="wrap crumbs-nav" aria-label="Kruimelpad">
+            <ol class="breadcrumbs">
+              <li><a href="/">Home</a></li>
+              {crumbs.map((c) => (
+                <li>
+                  <a href={c.href} aria-current={c.href === Astro.url.pathname.replace(/\/$/, '') ? 'page' : undefined}>
+                    {c.name}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .skip:focus {
+    position: fixed !important;
+    top: 12px;
+    left: 12px;
+    width: auto;
+    height: auto;
+    clip: auto;
+    padding: 10px 16px;
+    background: var(--ink);
+    color: var(--white);
+    z-index: 100;
+    border-radius: 8px;
+  }
+  .crumbs-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: clamp(88px, 11vw, 112px);
+    z-index: 2;
+  }
+  .breadcrumbs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+  }
+  .breadcrumbs li + li::before {
+    content: '/';
+    margin-right: 0.4em;
+    opacity: 0.5;
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+import { site, euro } from '../data/site';
+import foto from '../assets/img/terras-gete-3.jpg';
+
+interface Props {
+  titel?: string;
+}
+const { titel = 'Zin in een paar dagen rust in het Hageland?' } = Astro.props;
+---
+
+<section class="cta">
+  <Image src={foto} alt="" widths={[800, 1400, 2000]} sizes="100vw" class="bg" layout="none" />
+  <div class="wrap inner reveal">
+    <h2>{titel}</h2>
+    <p>
+      Twee gastenkamers, tot {site.maxPersonen} personen, vanaf {euro(site.prijsVanaf)}. Laat weten wanneer je wil komen en
+      Greet bevestigt persoonlijk.
+    </p>
+    <div class="actions">
+      <a href="/boeken" class="btn btn-light">Beschikbaarheid vragen</a>
+      <a href={`tel:${site.telefoonE164}`} class="btn btn-ghost">Bel {site.telefoon}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    color: var(--white);
+    padding-block: clamp(96px, 14vw, 180px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+  .cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgb(23 28 18 / 88%) 0%, rgb(23 28 18 / 55%) 60%, rgb(23 28 18 / 25%));
+    z-index: -1;
+  }
+  .inner {
+    max-width: var(--wrap);
+  }
+  h2 {
+    max-width: 16ch;
+  }
+  p {
+    max-width: 48ch;
+    font-size: 1.15rem;
+    opacity: 0.92;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+</style>

@@ -1,0 +1,559 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { berichten } from '../data/gastenboek';
+import hero from '../assets/img/terras-gete-1.jpg';
+
+/**
+ * Werkpagina voor Greet en Jo, niet voor bezoekers: noindex, uit de sitemap
+ * en geblokkeerd in robots.txt. Verwijderen voor livegang.
+ *
+ * Meetwaarden: hetgetehof.be op 28 september 2026. Tarieven komen uit
+ * coopconsult/src/config/site.ts (exclusief btw).
+ */
+const gemeten = '28 september 2026';
+const meting = {
+  spamberichten: 59,
+  spamlinks: 374,
+  casinoVermeldingen: 394,
+  wordpress: '5.6.21',
+};
+const overschreven = ['Prijs', 'Gastenboek', 'Geteterras', 'Slaapkamer', 'Keuken', 'Tv-hoek', 'Terras'];
+const spamTitels = [
+  'Rayslots Casino Online: An Insider’s Look at Features',
+  'Understanding the Safety Measures at Sweety Win Casino',
+  'Are the Loyalty Rewards at Aztec Casino Worth It?',
+  'Why Slots Dynamite Casino is a Safe Bet for Players',
+];
+
+const maker = {
+  naam: 'Dieter Vanonckelen',
+  zaak: 'Coop Consult',
+  url: 'https://coopconsult.be',
+  email: 'dieter@coopconsult.be',
+  telefoon: '+32 496 70 37 19',
+  telefoonHref: '+32496703719',
+};
+const tarief = { eenmalig: 350, maand: 19.99 };
+const eur = (n: number) => new Intl.NumberFormat('nl-BE', { style: 'currency', currency: 'EUR' }).format(n);
+
+const vergelijking = [
+  ['Veiligheid', `WordPress ${meting.wordpress} met plugins, vandaag gehackt`, 'Statische site: geen database, geen login, niets om in te breken'],
+  ['Wat Google leest', 'Casinoreclame in het Engels op 8 pagina’s', 'Foto’s en uitleg over Het Getehof'],
+  ['Prijs vinden', 'De prijspagina is leeg', 'Prijs op de homepage, de boekingspagina en in Google'],
+  ['Boeken', 'Een e-mailadres onderaan de contactpagina', 'Een aanvraagformulier met data en aantal personen, en een telefoonnummer dat je op de gsm meteen kan aantikken'],
+  ['Op de gsm', 'Door de spam weegt de homepage 5 keer meer dan nodig', 'Gemaakt voor de gsm, foto’s groot te bekijken'],
+  ['Google en ChatGPT', 'De spam kan de hele site uit Google doen zakken', 'Per pagina een zoekterm, structured data, llms.txt'],
+  ['Gastenboek', 'Verdwenen, vervangen door spam', `${berichten.length} echte berichten teruggehaald uit het archief`],
+];
+
+const nodig = [
+  { t: 'Het adres', d: 'Straat en huisnummer stonden nergens op de oude site. Gasten en Google Maps hebben dat nodig.' },
+  { t: 'De actuele prijs', d: `De oude prijspagina zei "vanaf ${site.prijsVanaf} euro" (mei 2022). Klopt dat nog, en is het ontbijt inbegrepen?` },
+  { t: 'Toegang tot de domeinnaam', d: 'Wie beheert hetgetehof.be vandaag? Dan zet ik de nieuwe site erop en haal ik de gehackte offline.' },
+  { t: 'Recente foto’s (mag)', d: 'De site werkt met de bestaande foto’s. Nieuwe foto’s van de kamers maken hem nog sterker.' },
+];
+---
+
+<Base title="Voorstel nieuwe website" description="Voorstel voor een nieuwe website voor B&B Het Getehof, opgesteld door Coop Consult." noindex>
+  <section class="hero">
+    <Image src={hero} alt="" widths={[800, 1600, 2400]} sizes="100vw" class="bg" loading="eager" layout="none" />
+    <div class="wrap inner">
+      <span class="eyebrow light">Voorstel voor {site.uitbaters} · {gemeten}</span>
+      <h1>Een nieuwe website voor Het Getehof</h1>
+      <p class="lead light">
+        Hieronder staat wat er vandaag mis is met hetgetehof.be en wat de nieuwe site anders doet. De nieuwe site zelf is al klaar,
+        klik gerust rond.
+      </p>
+      <div class="actions">
+        <a href="/" class="btn btn-light">Bekijk de nieuwe site</a>
+        <a href="#prijs" class="btn btn-ghost">Wat het kost</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alarm">
+    <div class="wrap">
+      <span class="eyebrow">Eerst het belangrijkste</span>
+      <h2>Jullie huidige website is gehackt</h2>
+      <p class="lead">
+        Op {gemeten} heb ik hetgetehof.be bekeken. Iemand heeft ingebroken en de site gebruikt om reclame te maken voor online
+        casino's. Jullie zien daar zelf niets van: de reclame staat buiten beeld in de code, zodat alleen Google ze leest. Hoe ze binnengeraakt zijn, zie je van buitenaf niet. Meestal is het een verouderde plugin, een oud thema of
+        een zwak wachtwoord. Dat is geen fout van jullie. Het gebeurt met veel WordPress-sites die een tijd niet opgevolgd
+        worden.
+      </p>
+
+      <div class="stats">
+        <div><strong>{meting.spamberichten}</strong><span>verborgen spamberichten over casino's op jullie homepage</span></div>
+        <div><strong>{meting.spamlinks}</strong><span>verborgen links naar buitenlandse gok- en spamsites</span></div>
+        <div><strong>{overschreven.length}</strong><span>pagina's waarvan de tekst vervangen is door verborgen casinotekst</span></div>
+        <div><strong>2020</strong><span>het jaar waarin jullie WordPress-reeks uitkwam ({meting.wordpress})</span></div>
+      </div>
+
+      <div class="evidence">
+        <div class="browser" aria-label="Wat Google leest op de huidige homepage">
+          <div class="chrome"><span></span><span></span><span></span><em>hetgetehof.be, zoals Google het leest</em></div>
+          <div class="screen">
+            <p class="fake-h">Actualités récentes</p>
+            <ul>{spamTitels.map((t) => <li>{t}</li>)}</ul>
+            <p class="more">… en nog {meting.spamberichten - spamTitels.length} zulke berichten</p>
+          </div>
+        </div>
+        <div class="evidence-text">
+          <h3>Wat dit betekent voor jullie</h3>
+          <ul class="checks">
+            <li>
+              <strong>Wie de prijs zoekt, vindt een lege pagina.</strong> Op de pagina's {overschreven.join(', ')} is jullie eigen
+              tekst weg. Wat er nu staat, is casinotekst die buiten beeld geschoven is.
+            </li>
+            <li>
+              <strong>Google kan de site als gehackt markeren.</strong> Dan staat er "Deze site is mogelijk gehackt" in de
+              zoekresultaten, of verdwijnt Het Getehof er helemaal uit.
+            </li>
+            <li>
+              <strong>Jullie gastenboek is weg.</strong> Twaalf berichten van gasten, verdwenen. Ik heb ze teruggehaald uit het
+              internetarchief; de ervaringen van gasten staan terug op de nieuwe site.
+            </li>
+            <li><strong>Opkuisen alleen volstaat niet.</strong> Zolang niemand weet waar het lek zit, kan dezelfde inbraak opnieuw gebeuren.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section compare">
+    <div class="wrap">
+      <span class="eyebrow">Vroeger en nu</span>
+      <h2>Wat de nieuwe site anders doet</h2>
+      <div class="table" role="table" aria-label="Vergelijking oude en nieuwe website">
+        <div class="tr th" role="row">
+          <span role="columnheader"></span><span role="columnheader">Vandaag</span><span role="columnheader">Nieuwe site</span>
+        </div>
+        {
+          vergelijking.map(([k, oud, nieuw]) => (
+            <div class="tr" role="row">
+              <span role="rowheader">{k}</span>
+              <span role="cell" class="old">{oud}</span>
+              <span role="cell" class="new">{nieuw}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section pages">
+    <div class="wrap">
+      <span class="eyebrow">Al klaar om te bekijken</span>
+      <h2>De zes pagina's</h2>
+      <div class="page-grid">
+        <a href="/"><strong>Home</strong><span>Gericht op wie "B&amp;B Hageland" of "B&amp;B Zoutleeuw" zoekt.</span></a>
+        <a href="/kamers"><strong>Kamers</strong><span>Slaapkamers, keuken en zithoek, met alle foto's groot te bekijken.</span></a>
+        <a href="/tuin-en-terras"><strong>Tuin &amp; terras</strong><span>Het Geteterras en de tuin, met alle foto's.</span></a>
+        <a href="/omgeving"><strong>Omgeving</strong><span>Fietsen en wandelen, Het Vinne, Zoutleeuw en de steden in de buurt.</span></a>
+        <a href="/gastenboek"><strong>Gastenboek</strong><span>De {berichten.length} berichten uit het oude gastenboek.</span></a>
+        <a href="/boeken"><strong>Prijs &amp; boeken</strong><span>De prijs, een aanvraagformulier en de contactgegevens.</span></a>
+      </div>
+      <p class="note">
+        Daarnaast heeft elke pagina heeft een eigen zoekterm, schema.org-gegevens voor Google, een llms.txt voor ChatGPT en
+        andere AI-assistenten, en doorverwijzingen van de oude adressen zodat geen enkele bestaande link breekt.
+      </p>
+    </div>
+  </section>
+
+  <section class="section need">
+    <div class="wrap">
+      <span class="eyebrow">Om live te gaan</span>
+      <h2>Wat ik nog van jullie nodig heb</h2>
+      <ol class="need-list">{nodig.map((n) => <li><strong>{n.t}</strong><span>{n.d}</span></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="section price" id="prijs">
+    <div class="wrap price-grid">
+      <div>
+        <span class="eyebrow light">Prijs</span>
+        <h2>Wat het kost</h2>
+        <p>
+          Het ontwerp, de teksten, de vindbaarheid in Google en AI, het overzetten van de domeinnaam en het offline halen van de
+          gehackte site zitten erin. Daarna zorg ik dat de site online, veilig en actueel blijft, met elke maand één kleine
+          aanpassing inbegrepen: een prijs, een foto, een nieuwe gastenboekpost.
+        </p>
+      </div>
+      <div class="price-card">
+        <div class="amount"><strong>{eur(tarief.eenmalig)}</strong><span>eenmalig, voor de volledige site</span></div>
+        <div class="amount"><strong>{eur(tarief.maand)}</strong><span>per maand, hosting en opvolging</span></div>
+        <p class="vat">Bedragen exclusief btw.</p>
+        <a class="btn btn-light" href={`mailto:${maker.email}?subject=${encodeURIComponent('Nieuwe website Het Getehof')}`}>Mail Dieter</a>
+        <a class="phone" href={`tel:${maker.telefoonHref}`}>of bel {maker.telefoon}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section sign">
+    <div class="wrap sign-inner">
+      <p>
+        Ik ben {maker.naam} van <a href={maker.url}>{maker.zaak}</a>. Ik bouw websites voor zaken in de buurt. Jullie
+        hebben altijd contact met mij, de persoon die de site ook bouwt.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 88svh;
+    display: grid;
+    align-items: end;
+    color: var(--white);
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(0deg, rgb(23 28 18 / 92%), rgb(23 28 18 / 35%) 70%, rgb(23 28 18 / 45%));
+  }
+  .inner {
+    padding-block: 140px 64px;
+  }
+  .inner h1 {
+    max-width: 14ch;
+  }
+  .eyebrow.light {
+    color: var(--sage);
+  }
+  .lead.light {
+    color: rgb(255 255 255 / 88%);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .alarm h2 {
+    max-width: 18ch;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 40px 0 56px;
+  }
+  .stats div {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border-top: 4px solid #a0442c;
+  }
+  .stats strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 450;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .stats span {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .evidence {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  .browser {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: #fff;
+    font-family: Arial, sans-serif;
+    transform: rotate(-1deg);
+  }
+  .chrome {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    background: #e9e9e6;
+    padding: 10px 14px;
+  }
+  .chrome span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #c9c9c4;
+  }
+  .chrome em {
+    font-style: normal;
+    font-size: 0.8rem;
+    color: #555;
+    margin-left: 12px;
+    background: #fff;
+    padding: 3px 12px;
+    border-radius: 6px;
+  }
+  .screen {
+    padding: 22px 24px;
+    background: #d0d8cb;
+  }
+  .fake-h {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+  .screen ul {
+    margin: 0;
+    padding-left: 1.1em;
+  }
+  .screen li {
+    color: #1a4fb5;
+    text-decoration: underline;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+  }
+  .more {
+    color: #a0442c;
+    font-weight: 700;
+    margin: 10px 0 0;
+    font-size: 0.9rem;
+  }
+  .checks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 16px;
+  }
+  .checks li {
+    padding-left: 28px;
+    position: relative;
+    color: var(--ink-soft);
+  }
+  .checks li::before {
+    content: '!';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #a0442c;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+  .checks strong {
+    color: var(--ink);
+  }
+
+  .compare {
+    background: var(--sage-soft);
+  }
+  .table {
+    margin-top: 32px;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .tr {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr 1.6fr;
+    gap: 16px;
+    padding: 18px 24px;
+    border-bottom: 1px solid rgb(23 28 18 / 8%);
+  }
+  .th {
+    background: var(--ink);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .tr [role='rowheader'] {
+    font-weight: 600;
+  }
+  .old {
+    color: #8a3a26;
+  }
+  .new {
+    color: #2f4a22;
+    font-weight: 500;
+  }
+
+  .page-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .page-grid a {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-decoration: none;
+    box-shadow: var(--shadow);
+    display: grid;
+    gap: 6px;
+    transition: transform 0.2s ease;
+  }
+  .page-grid a:hover {
+    transform: translateY(-3px);
+  }
+  .page-grid strong {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+  .page-grid span {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .note {
+    margin-top: 28px;
+    max-width: 72ch;
+    color: var(--ink-soft);
+  }
+
+  .need {
+    background: var(--sage);
+  }
+  .need-list {
+    counter-reset: n;
+    list-style: none;
+    padding: 0;
+    margin: 32px 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .need-list li {
+    counter-increment: n;
+    background: var(--paper);
+    border-radius: var(--radius);
+    padding: 24px 24px 24px 72px;
+    position: relative;
+    display: grid;
+    gap: 4px;
+  }
+  .need-list li::before {
+    content: counter(n);
+    position: absolute;
+    left: 24px;
+    top: 22px;
+    font-family: var(--serif);
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--khaki-deep);
+  }
+  .need-list span {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  .price {
+    background: var(--ink);
+    color: var(--white);
+  }
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .price-grid p {
+    color: rgb(255 255 255 / 82%);
+  }
+  .price-card {
+    background: var(--forest);
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: var(--radius);
+    padding: clamp(24px, 4vw, 40px);
+    display: grid;
+    gap: 18px;
+  }
+  .amount strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1;
+  }
+  .amount span {
+    color: var(--sage);
+  }
+  .vat {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+  .price-card .btn {
+    justify-content: center;
+  }
+  .phone {
+    text-align: center;
+    color: var(--sage);
+    font-size: 0.95rem;
+  }
+  .sign-inner {
+    max-width: 680px;
+    text-align: center;
+    font-family: var(--serif);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 860px) {
+    .stats {
+      grid-template-columns: 1fr 1fr;
+    }
+    .evidence,
+    .price-grid,
+    .need-list {
+      grid-template-columns: 1fr;
+    }
+    .page-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .tr {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .th {
+      display: none;
+    }
+    .old::before {
+      content: 'Vandaag: ';
+      font-weight: 600;
+    }
+    .new::before {
+      content: 'Nieuw: ';
+      font-weight: 600;
+    }
+  }
+  @media (max-width: 520px) {
+    .page-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,127 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Gallery from '../components/Gallery.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+import g1 from '../assets/img/terras-gete-1.jpg';
+import g2 from '../assets/img/terras-gete-2.jpg';
+import g3 from '../assets/img/terras-gete-3.jpg';
+import g4 from '../assets/img/terras-gete-4.jpg';
+import paarden from '../assets/img/paarden.jpg';
+import t1 from '../assets/img/terras-1.jpg';
+import t2 from '../assets/img/terras-2.jpg';
+import t3 from '../assets/img/terras-3.jpg';
+import t4 from '../assets/img/terras-4.jpg';
+import t5 from '../assets/img/terras-5.jpg';
+import t6 from '../assets/img/terras-6.jpg';
+import t7 from '../assets/img/terras-7.jpg';
+import u1 from '../assets/img/tuin-1.jpg';
+import u2 from '../assets/img/tuin-2.jpg';
+import u3 from '../assets/img/tuin-3.jpg';
+import u4 from '../assets/img/tuin-4.jpg';
+import u5 from '../assets/img/tuin-5.jpg';
+import u7 from '../assets/img/tuin-7.jpg';
+import u8 from '../assets/img/tuin-8.jpg';
+import u9 from '../assets/img/tuin-9.jpg';
+import b2 from '../assets/img/bloesem-2.jpg';
+import b3 from '../assets/img/bloesem-3.jpg';
+
+const gete = [
+  { src: g1, alt: 'Trap met stoelen en tafel naar het water van de Kleine Gete' },
+  { src: g4, alt: 'Knotwilg en grasoever langs de Gete achter Het Getehof' },
+  { src: g2, alt: 'Berken en een wandelpad langs de weide' },
+  { src: g3, alt: 'Twee paarden grazen in de weide naast de tuin' },
+];
+const terras = [
+  { src: t1, alt: 'Terras met houten tafel, stoelen en bloemen tegen een haag' },
+  { src: t2, alt: 'Terras met parasol en tuintafel in de zon' },
+  { src: t3, alt: 'Teakhouten stoelen rond een tafel op het terras' },
+  { src: t4, alt: 'Ligstoelen naast een olijfboompje in een pot' },
+  { src: t5, alt: 'Ligstoelen op een houten vlonder in de tuin' },
+  { src: t6, alt: 'Twee ligstoelen met witte kussens' },
+  { src: t7, alt: 'Zitbanken voor het tuinhuis' },
+  { src: u9, alt: 'Achtergevel met terrastafel en stoelen' },
+];
+const tuin = [
+  { src: u1, alt: 'Zonnige tuin met parasols, buxusbollen en lavendel' },
+  { src: u2, alt: 'Tuin met sierlantaarn en tuinhuis' },
+  { src: u7, alt: 'Oude waterpomp in de voortuin' },
+  { src: u4, alt: 'Vaas met gerbera\'s op de tuintafel' },
+  { src: u3, alt: 'Bakstenen muur met lavendel en een tuinkruik' },
+  { src: u5, alt: 'Liggende terracottakruik tussen stenen' },
+  { src: u8, alt: 'Stenen borstbeeld in de tuin' },
+  { src: b2, alt: 'Witte fruitbloesem in de lente' },
+  { src: b3, alt: 'Roze bloesem met een vogeltje' },
+];
+---
+
+<Base
+  title="B&B met tuin en terras aan de Kleine Gete"
+  description="Een B&B met tuin en terras aan de Kleine Gete in Neerhespen: ontbijten in de zon, een glas wijn bij het water en paarden in de wei ernaast."
+  crumbs={[{ name: 'Tuin & terras', href: '/tuin-en-terras' }]}
+>
+  <header class="page-head wrap">
+    <span class="eyebrow">Tuin &amp; terras</span>
+    <h1>Een B&amp;B met tuin en terras aan de Kleine Gete</h1>
+    <p class="lead">
+      Geniet van de kleine dingen. Op het terras ontbijt je in de zon of drink je een glas wijn bij valavond, en achteraan de
+      tuin zit je op het Geteterras, vlak bij het water.
+    </p>
+  </header>
+
+  <section class="banner wrap">
+    <Image src={paarden} alt="Paarden grazen in de weide naast Het Getehof" widths={[800, 1400, 2200]} sizes="(max-width: 1240px) 100vw, 1180px" layout="none" />
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head">
+        <h2>Het Geteterras, langs het kabbelende water</h2>
+        <p>
+          Aan de achterkant van de tuin loopt de Kleine Gete. Een trap brengt je naar een zitplek vlak bij het water, met een tafel
+          en stoelen. Of zoals twee gasten uit Heule in het gastenboek schreven: een "heerlijke stek aan de Kleine Gete".
+        </p>
+      </div>
+      <Gallery fotos={gete} label="Foto's van het Geteterras" />
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <div class="head">
+        <h2>Het terras: ontbijt, zon en ligstoelen</h2>
+        <p>Op het terras kan je genieten van een smakelijk ontbijt of een heerlijk glas wijn. Ligstoelen en parasols staan klaar.</p>
+      </div>
+      <Gallery fotos={terras} label="Foto's van het terras" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head">
+        <h2>De tuin</h2>
+        <p>Buxus, lavendel, fruitbloesem in de lente en een oude waterpomp in de voortuin.</p>
+      </div>
+      <Gallery fotos={tuin} label="Foto's van de tuin" />
+    </div>
+  </section>
+
+  <CtaBand titel="Ontbijten aan de Gete? Vraag je data aan" />
+</Base>
+
+<style>
+  .banner :global(img) {
+    width: 100%;
+    aspect-ratio: 21/9;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .alt {
+    background: var(--sage-soft);
+  }
+  .head {
+    max-width: 680px;
+    margin-bottom: 36px;
+  }
+</style>

@@ -1,0 +1,230 @@
+---
+import { navigatie, site } from '../data/site';
+interface Props {
+  overlay?: boolean;
+}
+const { overlay = false } = Astro.props;
+const pad = Astro.url.pathname.replace(/\/$/, '');
+---
+
+<header class:list={['site-header', { overlay }]} data-header>
+  <div class="bar wrap">
+    <a href="/" class="logo" aria-label={`${site.naam}, naar de homepage`}>
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M4 26c5-3 9-3 12 0s7 3 12 0" /><path d="M6 20c4-2 7-2 10 0s6 2 10 0" opacity=".55" /><path d="M16 4 7 12v5h18v-5z" /></svg>
+      </span>
+      <span class="logo-text">
+        <span class="logo-name">Het Getehof</span>
+        <span class="logo-sub">B&amp;B · {site.dorp}</span>
+      </span>
+    </a>
+
+    <button class="menu-toggle" aria-expanded="false" aria-controls="hoofdmenu" data-menu-toggle>
+      <span class="visually-hidden">Menu</span>
+      <span class="burger" aria-hidden="true"></span>
+    </button>
+
+    <nav id="hoofdmenu" class="nav" aria-label="Hoofdmenu" data-menu>
+      <ul>
+        {
+          navigatie.map((item) => (
+            <li>
+              <a href={item.href} aria-current={pad === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/boeken" class="btn btn-primary nav-cta">Beschikbaarheid</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  if (header && toggle) {
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      header.classList.toggle('open', !open);
+      document.body.style.overflow = open ? '' : 'hidden';
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    color: var(--ink);
+    background: rgb(247 246 240 / 82%);
+    backdrop-filter: blur(14px) saturate(1.2);
+    border-bottom: 1px solid rgb(23 28 18 / 8%);
+    transition:
+      background 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
+  }
+  .site-header.overlay:not(.scrolled):not(.open) {
+    background: transparent;
+    backdrop-filter: none;
+    color: var(--white);
+    border-color: transparent;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: clamp(68px, 8vw, 84px);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .logo-mark svg {
+    width: 34px;
+    height: 34px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .logo-name {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+  .logo-sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav ul {
+    list-style: none;
+    display: flex;
+    gap: 26px;
+    margin: 0;
+    padding: 0;
+  }
+  .nav ul a {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.97rem;
+    padding-block: 6px;
+    border-bottom: 1px solid transparent;
+  }
+  .nav ul a:hover,
+  .nav ul a[aria-current='page'] {
+    border-bottom-color: var(--khaki);
+  }
+  .overlay:not(.scrolled):not(.open) .nav-cta {
+    background: var(--white);
+    color: var(--ink);
+  }
+  .menu-toggle {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .menu-toggle {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      background: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    .burger,
+    .burger::before,
+    .burger::after {
+      display: block;
+      width: 22px;
+      height: 1.6px;
+      background: currentColor;
+      transition: transform 0.25s ease;
+      position: relative;
+    }
+    .burger::before,
+    .burger::after {
+      content: '';
+      position: absolute;
+      left: 0;
+    }
+    .burger::before {
+      top: -7px;
+    }
+    .burger::after {
+      top: 7px;
+    }
+    .open .burger {
+      background: transparent;
+    }
+    .open .burger::before {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .open .burger::after {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+    .nav {
+      position: fixed;
+      inset: clamp(68px, 8vw, 84px) 0 0;
+      background: var(--paper);
+      color: var(--ink);
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 32px var(--gutter);
+      gap: 32px;
+      transform: translateY(-8px);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease,
+        visibility 0.25s;
+      height: 100dvh;
+    }
+    .open .nav {
+      opacity: 1;
+      transform: none;
+      visibility: visible;
+    }
+    .nav ul {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .nav ul a {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.9rem;
+      padding-block: 10px;
+      border-bottom: 1px solid rgb(23 28 18 / 10%);
+    }
+    .nav-cta {
+      justify-content: center;
+    }
+  }
+</style>

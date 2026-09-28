@@ -1,0 +1,209 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+
+import doopvont from '../assets/img/doopvont.jpg';
+import eikske from '../assets/img/eikske.jpg';
+import wandelen from '../assets/img/wandelen-getevallei.jpg';
+import wandelkaart from '../assets/img/wandelkaart-vinne.jpg';
+import lansiers from '../assets/img/lansiers.png';
+import vinne from '../assets/img/vinne.jpg';
+import tienen from '../assets/img/tienen.jpg';
+
+const plekken = [
+  {
+    id: 'neerhespen',
+    titel: 'Het dorp Neerhespen',
+    foto: doopvont,
+    alt: 'Romaanse doopvont in de Sint-Mauritiuskerk van Neerhespen',
+    afstand: 'Je logeert er middenin',
+    tekst: [
+      'Het Getehof ligt in het centrum van Neerhespen, een dorp van 351 inwoners. De naam zou komen van het Germaanse "hasp", dat weide of kromming betekent. De Sint-Mauritiuskerk staat bekend om haar doopvont uit de 11de of 12de eeuw, en in de gevel zit nog een kanonskogel ingemetseld, een herinnering aan de slag bij Neerwinden.',
+      'Ook de Dienst Hondensteun van de federale politie zit in Neerhespen. Een veertigtal herdershonden leert er de kneepjes van het politievak.',
+    ],
+  },
+  {
+    id: 'eikske',
+    titel: "Kapel 't Eikske",
+    foto: eikske,
+    alt: "Bakstenen kapel 't Eikske tussen de velden",
+    afstand: 'Wandelafstand',
+    tekst: [
+      "'t Eikske is een bekende kapel op de grens van Neerhespen, Zoutleeuw en Landen. Wandelaars komen er tot rust en genieten van een prachtig vergezicht over het Hageland.",
+    ],
+  },
+  {
+    id: 'vinne',
+    titel: 'Provinciaal domein Het Vinne, Zoutleeuw',
+    foto: vinne,
+    alt: 'Knuppelpad over het meer van Het Vinne',
+    afstand: '10 min met de auto, een half uur fietsen',
+    tekst: [
+      'Het Vinne is een provinciaal natuurdomein met wandelwegen, knuppelpaden, schuilhutten, vogelkijkhutten en uitkijktorens. De vele infoborden maken een wandeling extra boeiend.',
+      'Wil je te voet gaan? In Het Getehof ligt een gratis kaart klaar voor een wandeling van 11,5 km naar Het Vinne, met uitleg over de route en de bezienswaardigheden onderweg.',
+    ],
+  },
+  {
+    id: 'lansiers',
+    titel: 'Museum Derde Regiment Lansiers, Orsmaal',
+    foto: lansiers,
+    alt: 'Portretten van soldaten van het Derde Regiment Lansiers',
+    afstand: '3 km',
+    tekst: [
+      'Op drie kilometer van Het Getehof vond in augustus 1914 de Slag van Orsmaal plaats. Het museum in Orsmaal toont harnassen, uniformen, wapens, vaandels en obussen uit de periode van na de Slag bij Waterloo tot 1918.',
+    ],
+  },
+  {
+    id: 'steden',
+    titel: 'Diest, Hasselt, Tienen en Sint-Truiden',
+    foto: tienen,
+    alt: 'Grote Markt van Tienen bij avond met kerk en stadhuis',
+    afstand: 'Tienen en Sint-Truiden op een tiental kilometer',
+    tekst: [
+      'Het Getehof ligt centraal tussen vier steden die een bezoek meer dan waard zijn. Tienen en Sint-Truiden claimen allebei de titel van tweede grootste markt van België. De cijfers lopen uiteen, maar Tienen lijkt die ietwat vreemde wedstrijd te winnen. Beide markten liggen op een tiental kilometer: oordeel zelf!',
+    ],
+  },
+];
+---
+
+<Base
+  title="Fietsen en wandelen in de Getevallei"
+  description="Fietsen en wandelen in de Getevallei vanuit Neerhespen: het beste wandelnetwerk van België 2016, de LF6, Het Vinne, Zoutleeuw en vier historische steden."
+  crumbs={[{ name: 'Omgeving', href: '/omgeving' }]}
+>
+  <header class="page-head wrap">
+    <span class="eyebrow">Omgeving</span>
+    <h1>Fietsen en wandelen in de Getevallei</h1>
+    <p class="lead">
+      Ten oosten van Leuven, vlak bij de Limburgse grens, ligt het groene {site.streek}. {site.gemeente} ligt middenin de Getevallei:
+      de fiets- en wandelroutes beginnen aan de voordeur.
+    </p>
+  </header>
+
+  <section class="section routes">
+    <div class="wrap routes-grid">
+      <article class="route">
+        <Image src={wandelen} alt="Wandelaars op een pad in de Getevallei" widths={[400, 700]} sizes="(max-width: 860px) 100vw, 40vw" layout="none" />
+        <div>
+          <h2>Wandelen: het beste wandelproduct van België</h2>
+          <p>
+            Het wandelnetwerk Getevallei werd verkozen tot beste wandelproduct van België 2016. Op de kaart staan alle trajecten
+            en knooppunten, zodat je zelf je wandeling uitstippelt. De lussen zijn gemiddeld 3 tot 5 km lang.
+          </p>
+        </div>
+      </article>
+      <article class="route">
+        <Image src={wandelkaart} alt="Wandelkaart van Het Getehof naar Het Vinne met knooppunten" widths={[400, 700]} sizes="(max-width: 860px) 100vw, 40vw" layout="none" />
+        <div>
+          <h2>Fietsen: knooppunten en de LF6</h2>
+          <p>
+            Het fietsnetwerk van Vlaams-Brabant staat volledig op één kaart. Vanuit Het Getehof stippel je je eigen route uit.
+            Voor een meerdaagse tocht ligt de LF6 Vlaanderen Fietsroute dichtbij, en je fiets staat 's nachts binnen in de garage.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section places">
+    <div class="wrap">
+      <h2 class="places-title">Wat is er te zien rond Het Getehof?</h2>
+      {
+        plekken.map((p, i) => (
+          <article id={p.id} class:list={['place', { flip: i % 2 === 1 }]}>
+            <div class="place-media">
+              <Image src={p.foto} alt={p.alt} widths={[400, 700, 1000]} sizes="(max-width: 860px) 100vw, 45vw" layout="none" />
+            </div>
+            <div class="place-text">
+              <span class="eyebrow">{p.afstand}</span>
+              <h3>{p.titel}</h3>
+              {p.tekst.map((t) => <p>{t}</p>)}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section agenda">
+    <div class="wrap agenda-inner">
+      <h2>Wat is er te doen in Linter?</h2>
+      <p>
+        Markten, concerten, wandelingen met gids: de actuele activiteiten in de regio vind je in de agenda van UiTinVlaanderen.
+      </p>
+      <a class="btn btn-primary" href="https://www.uitinvlaanderen.be/agenda/alle/linter" rel="noopener" target="_blank">Uit in Linter</a>
+    </div>
+  </section>
+
+  <CtaBand titel="Een uitvalsbasis voor fietsers en wandelaars" />
+</Base>
+
+<style>
+  .routes {
+    padding-top: 0;
+  }
+  .routes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .route {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .route :global(img) {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+  }
+  .route > div {
+    padding: 28px 28px 12px;
+  }
+  .route h2 {
+    font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  }
+  .places {
+    background: var(--sage-soft);
+  }
+  .places-title {
+    max-width: 20ch;
+    margin-bottom: 48px;
+  }
+  .place {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+    padding-block: 36px;
+    border-top: 1px solid rgb(23 28 18 / 12%);
+  }
+  .place.flip .place-media {
+    order: 2;
+  }
+  .place-media :global(img) {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .place-text {
+    max-width: 56ch;
+  }
+  .agenda-inner {
+    max-width: 720px;
+    text-align: center;
+  }
+  @media (max-width: 860px) {
+    .routes-grid,
+    .place {
+      grid-template-columns: 1fr;
+    }
+    .place.flip .place-media {
+      order: 0;
+    }
+  }
+</style>

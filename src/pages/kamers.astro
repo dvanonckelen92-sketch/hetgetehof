@@ -1,0 +1,149 @@
+---
+import Base from '../layouts/Base.astro';
+import Gallery from '../components/Gallery.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, euro } from '../data/site';
+
+import s3 from '../assets/img/slaapkamer-3.jpg';
+import s4 from '../assets/img/slaapkamer-4.jpg';
+import s5 from '../assets/img/slaapkamer-5.jpg';
+import k1 from '../assets/img/keuken-1.jpg';
+import k2 from '../assets/img/keuken-2.jpg';
+import k3 from '../assets/img/keuken-3.jpg';
+import k4 from '../assets/img/keuken-4.jpg';
+import k5 from '../assets/img/keuken-5.jpg';
+import z1 from '../assets/img/zithoek-1.jpg';
+import z2 from '../assets/img/zithoek-2.jpg';
+import z3 from '../assets/img/zithoek-3.jpg';
+
+const delen = [
+  {
+    id: 'slaapkamers',
+    titel: 'Twee slaapkamers boven',
+    tekst: `Droom weg na een dag de landelijke streek te hebben verkend. De ${site.kamers} slaapkamers liggen op de bovenverdieping, samen met de badkamer met douche. Samen bieden ze plaats aan ${site.maxPersonen} volwassenen: ideaal voor een koppel, twee koppels of een klein gezin.`,
+    fotos: [
+      { src: s4, alt: 'Tweepersoonsbed met smeedijzeren hoofdeinde en roze kussens' },
+      { src: s5, alt: 'Slaapkamer met tweepersoonsbed, nachtkastje en lamp' },
+      { src: s3, alt: 'Opgevouwen handdoeken op het bed, klaar voor aankomst' },
+    ],
+  },
+  {
+    id: 'keuken',
+    titel: 'Een eigen keuken',
+    tekst:
+      'Waarom ga je niet aan de slag met straffe streekproducten uit het Hageland en tover je een heerlijke maaltijd op tafel? De keuken beneden is volledig ingericht, met oven, koelkast en een eettafel voor vier.',
+    fotos: [
+      { src: k1, alt: 'Witte keuken met oven, dampkap en koelkast' },
+      { src: k2, alt: 'Eettafel met witte stoelen en een fles wijn' },
+      { src: k5, alt: 'Gedekte ontbijttafel met koffiekopjes en groene servetten' },
+      { src: k4, alt: 'Tafel gedekt met wijn, servetten en een kaartje "Enjoy every moment"' },
+      { src: k3, alt: 'Koffie en decoratie op de keukentafel' },
+    ],
+  },
+  {
+    id: 'zithoek',
+    titel: 'Zithoek met tv',
+    tekst:
+      'Kom na een lange dag tot rust en kruip voor het slapengaan nog even knus tegen elkaar in de zithoek. Kijk het regionale nieuws, een film of je favoriete serie.',
+    fotos: [
+      { src: z3, alt: 'Lederen zetel met kussens en een salontafel met bloemen' },
+      { src: z1, alt: 'Welkomstbordje en een vaas met een rode bloem' },
+      { src: z2, alt: 'Potjes lavendel op een houten plank' },
+    ],
+  },
+];
+---
+
+<Base
+  title="Gastenkamers in Linter voor 2 tot 4 personen"
+  description={`Gastenkamers in Linter: ${site.kamers} slaapkamers voor maximaal ${site.maxPersonen} personen, met eigen keuken, zithoek en badkamer. Geen andere gasten tijdens je verblijf.`}
+  crumbs={[{ name: 'Kamers', href: '/kamers' }]}
+>
+  <header class="page-head wrap">
+    <span class="eyebrow">Kamers &amp; ruimtes</span>
+    <h1>Gastenkamers in Linter, met het hele huis erbij</h1>
+    <p class="lead">
+      Twee gastenkamers voor samen {site.maxPersonen} volwassenen, en daarbij een keuken, een zithoek en een badkamer die je met
+      niemand anders deelt. Een kamer boeken kan vanaf {euro(site.prijsVanaf)}.
+    </p>
+    <nav class="jump" aria-label="Spring naar">
+      {delen.map((d) => <a href={`#${d.id}`}>{d.titel}</a>)}
+      <a href="/tuin-en-terras">Tuin &amp; terras</a>
+    </nav>
+  </header>
+
+  {
+    delen.map((d, i) => (
+      <section id={d.id} class:list={['section', 'part', { alt: i % 2 === 1 }]}>
+        <div class="wrap part-grid">
+          <div class="part-text">
+            <span class="eyebrow">0{i + 1}</span>
+            <h2>{d.titel}</h2>
+            <p>{d.tekst}</p>
+          </div>
+          <Gallery fotos={d.fotos} label={`Foto's: ${d.titel}`} />
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section">
+    <div class="wrap indeling">
+      <h2>Hoe is het huis ingedeeld?</h2>
+      <p>
+        Het Getehof heeft twee verdiepingen. Beneden liggen de keuken met eettafel en de zithoek met tv, met toegang tot de tuin
+        en het terras. Boven liggen de twee slaapkamers en de badkamer. Fietsen kunnen binnen in de garage. Meer weten over de
+        buitenkant? Bekijk de <a href="/tuin-en-terras">tuin en het terras aan de Kleine Gete</a>.
+      </p>
+    </div>
+  </section>
+
+  <CtaBand titel="Kom bij ons tot rust" />
+</Base>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid rgb(23 28 18 / 18%);
+    border-radius: 999px;
+    font-size: 0.92rem;
+  }
+  .jump a:hover {
+    background: var(--ink);
+    color: var(--white);
+  }
+  .part {
+    padding-block: clamp(48px, 7vw, 88px);
+  }
+  .part.alt {
+    background: var(--sage-soft);
+  }
+  .part-grid {
+    display: grid;
+    grid-template-columns: 4fr 8fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  .part-text {
+    position: sticky;
+    top: 110px;
+  }
+  .indeling {
+    max-width: 780px;
+  }
+  @media (max-width: 860px) {
+    .part-grid {
+      grid-template-columns: 1fr;
+    }
+    .part-text {
+      position: static;
+    }
+  }
+</style>

@@ -1,0 +1,243 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { site, euro } from '../data/site';
+import { faq, faqSchema } from '../data/faq';
+
+const vandaag = new Date().toISOString().slice(0, 10);
+const ontbijtKeuzes = ['Met ontbijt', 'Zonder ontbijt', 'Weet ik nog niet'];
+---
+
+<Base
+  title="B&B in Linter boeken: prijs en contact"
+  description={`B&B in Linter boeken: een kamer in Het Getehof kost vanaf ${euro(site.prijsVanaf)}. Vraag je data aan via het formulier, mail of bel Greet op ${site.telefoon}.`}
+  crumbs={[{ name: 'Prijs & boeken', href: '/boeken' }]}
+  schema={[
+    faqSchema(faq),
+    {
+      '@type': 'Offer',
+      itemOffered: { '@id': `${site.url}/#bnb` },
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        minPrice: site.prijsVanaf,
+        priceCurrency: 'EUR',
+        unitText: 'kamer',
+        valueAddedTaxIncluded: true,
+      },
+    },
+  ]}
+>
+  <header class="page-head wrap">
+    <span class="eyebrow">Prijs &amp; boeken</span>
+    <h1>B&amp;B in Linter boeken</h1>
+    <p class="lead">
+      Een kamer in Het Getehof boeken kan vanaf <strong>{euro(site.prijsVanaf)}</strong>. Laat weten wanneer je wil komen en met
+      hoeveel, dan bevestigt Greet je verblijf en de prijs.
+    </p>
+  </header>
+
+  <section class="section book">
+    <div class="wrap book-grid">
+      <!--
+        Netlify Forms: Netlify vindt dit formulier bij de deploy in de gebouwde HTML.
+        Meldingen per mail naar Greet stel je in bij Netlify onder Forms > Notifications.
+        Het veld "email" wordt daar automatisch het antwoordadres.
+      -->
+      <form
+        class="form-card"
+        name="boeking"
+        method="POST"
+        action="/bedankt"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        data-boekform
+      >
+        <input type="hidden" name="form-name" value="boeking" />
+        <p class="hp"><label>Niet invullen <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+
+        <h2>Beschikbaarheid vragen</h2>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="aankomst">Aankomst</label>
+            <input id="aankomst" type="date" name="aankomst" min={vandaag} required />
+          </div>
+          <div class="field">
+            <label for="vertrek">Vertrek</label>
+            <input id="vertrek" type="date" name="vertrek" min={vandaag} required />
+          </div>
+        </div>
+
+        <fieldset class="field">
+          <legend>Aantal personen</legend>
+          <div class="choices">
+            {
+              Array.from({ length: site.maxPersonen }, (_, i) => (
+                <label>
+                  <input type="radio" name="personen" value={i + 1} checked={i === 1} />
+                  <span>{i + 1}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Ontbijt</legend>
+          <div class="choices">
+            {
+              ontbijtKeuzes.map((k, i) => (
+                <label>
+                  <input type="radio" name="ontbijt" value={k} checked={i === 0} />
+                  <span>{k}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="naam">Naam</label>
+            <input id="naam" type="text" name="naam" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="telefoon">Telefoon</label>
+            <input id="telefoon" type="tel" name="telefoon" autocomplete="tel" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">E-mailadres</label>
+          <input id="email" type="email" name="email" autocomplete="email" required />
+        </div>
+
+        <div class="field">
+          <label for="bericht">Bericht</label>
+          <textarea id="bericht" name="bericht" rows="4" placeholder="Bijvoorbeeld: we komen met de fiets"></textarea>
+        </div>
+
+        <p class="form-error" data-fout hidden>De vertrekdatum moet na de aankomstdatum liggen.</p>
+        <button class="btn btn-primary" type="submit">Aanvraag versturen</button>
+        <p class="form-hint">Je aanvraag komt bij Greet terecht. Je boekt of betaalt pas iets als zij je verblijf bevestigt.</p>
+      </form>
+
+      <aside class="contact">
+        <div class="card dark">
+          <h2>Liever bellen?</h2>
+          <p>Greet beantwoordt je vragen graag zelf.</p>
+          <a class="big" href={`tel:${site.telefoonE164}`}>{site.telefoon}</a>
+          <a class="mail" href={`mailto:${site.email}`}>{site.email}</a>
+        </div>
+        <div class="card">
+          <h3>Adres</h3>
+          <p>
+            {site.naam}<br />
+            {site.straat && <>{site.straat}<br /></>}
+            {site.postcode} {site.dorp} ({site.gemeente})<br />
+            {site.provincie}, België
+          </p>
+          <a class="text-link" href={site.mapsUrl} target="_blank" rel="noopener">Route in Google Maps →</a>
+        </div>
+        <div class="card">
+          <h3>In de pers</h3>
+          <ul>{site.pers.map((p) => <li><a href={p.url} rel="noopener" target="_blank">{p.titel}</a></li>)}</ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section faq-sec">
+    <div class="wrap faq-wrap">
+      <h2>Veelgestelde vragen over je verblijf</h2>
+      <Faq vragen={faq} />
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Vertrek moet na aankomst liggen. De rest valideert de browser zelf.
+  const form = document.querySelector<HTMLFormElement>('[data-boekform]');
+  if (form) {
+    const aankomst = form.querySelector<HTMLInputElement>('#aankomst')!;
+    const vertrek = form.querySelector<HTMLInputElement>('#vertrek')!;
+    const fout = form.querySelector<HTMLElement>('[data-fout]')!;
+    aankomst.addEventListener('change', () => {
+      if (!aankomst.value) return;
+      const volgende = new Date(aankomst.value);
+      volgende.setDate(volgende.getDate() + 1);
+      vertrek.min = volgende.toISOString().slice(0, 10);
+      if (vertrek.value && vertrek.value <= aankomst.value) vertrek.value = '';
+    });
+    form.addEventListener('submit', (e) => {
+      const verkeerd = !!vertrek.value && vertrek.value <= aankomst.value;
+      fout.hidden = !verkeerd;
+      if (verkeerd) {
+        e.preventDefault();
+        vertrek.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .book {
+    padding-top: 0;
+  }
+  .book-grid {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .form-card h2 {
+    font-size: clamp(1.6rem, 2.6vw, 2rem);
+    margin: 0;
+  }
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: clamp(24px, 4vw, 40px);
+    box-shadow: var(--shadow);
+  }
+  .contact {
+    display: grid;
+    gap: 16px;
+  }
+  .card.dark {
+    background: var(--ink);
+    color: var(--white);
+  }
+  .card.dark h2 {
+    font-size: 1.8rem;
+  }
+  .big {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    text-decoration: none;
+    color: var(--white);
+  }
+  .mail {
+    color: var(--sage);
+    overflow-wrap: anywhere;
+  }
+  .card ul {
+    padding-left: 1.1em;
+    margin: 0;
+  }
+  .text-link {
+    font-weight: 600;
+  }
+  .faq-sec {
+    background: var(--sage-soft);
+  }
+  .faq-wrap {
+    max-width: 880px;
+  }
+  @media (max-width: 860px) {
+    .book-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

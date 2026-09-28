@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+
+interface Props {
+  titel: string;
+  tekst: string;
+}
+const { titel, tekst } = Astro.props;
+---
+
+<Base title="Bedankt" description="Je bericht is goed aangekomen bij Het Getehof." noindex>
+  <section class="page-head wrap thanks">
+    <span class="eyebrow">Verstuurd</span>
+    <h1>{titel}</h1>
+    <p class="lead">{tekst}</p>
+    <p class="lead">Dringend? Bel Greet op <a href={`tel:${site.telefoonE164}`}>{site.telefoon}</a>.</p>
+    <p class="links">
+      <a class="btn btn-primary" href="/">Naar de homepage</a>
+      <a class="btn btn-ghost" href="/omgeving">Bekijk de omgeving</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .thanks {
+    min-height: 70vh;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+</style>

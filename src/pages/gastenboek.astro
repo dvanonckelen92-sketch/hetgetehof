@@ -1,0 +1,159 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { berichten, datumNL } from '../data/gastenboek';
+
+const reviewSchema = berichten.map((b) => ({
+  '@type': 'Review',
+  itemReviewed: { '@id': `${site.url}/#bnb` },
+  author: { '@type': 'Person', name: b.woonplaats ? `${b.naam} uit ${b.woonplaats}` : b.naam },
+  datePublished: b.datum,
+  reviewBody: b.tekst,
+  inLanguage: 'nl',
+}));
+const eersteJaar = berichten.at(-1)!.datum.slice(0, 4);
+---
+
+<Base
+  title="Gastenboek en reviews van B&B in Linter"
+  description={`Lees wat gasten schreven over hun verblijf in onze B&B in Linter: ${berichten.length} berichten over het ontbijt, de rust, de fietsenstalling en het onthaal van Greet en Jo.`}
+  crumbs={[{ name: 'Gastenboek', href: '/gastenboek' }]}
+  schema={reviewSchema}
+>
+  <header class="page-head wrap">
+    <span class="eyebrow">Gastenboek</span>
+    <h1>Reviews van gasten van onze B&amp;B in Linter</h1>
+    <p class="lead">
+      {berichten.length} berichten sinds {eersteJaar}, overgenomen uit ons gastenboek en hier en daar licht ingekort.
+    </p>
+  </header>
+
+  <section class="section list">
+    <div class="wrap masonry">
+      {
+        berichten.map((b) => (
+          <article class="entry reveal">
+            {b.uitgelicht && <p class="highlight">“{b.uitgelicht}”</p>}
+            <p>{b.tekst}</p>
+            <footer>
+              <strong>{b.naam}</strong>
+              {b.woonplaats && <span> uit {b.woonplaats}</span>}
+              <time datetime={b.datum}>{datumNL(b.datum)}</time>
+            </footer>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section write">
+    <div class="wrap write-grid">
+      <div>
+        <h2>Bij ons gelogeerd?</h2>
+        <p>
+          Schrijf hier je bericht. Het komt eerst bij Greet terecht en verschijnt daarna in het gastenboek. Je e-mailadres wordt
+          niet getoond.
+        </p>
+      </div>
+      <form
+        class="form-card"
+        name="gastenboek"
+        method="POST"
+        action="/bedankt-gastenboek"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value="gastenboek" />
+        <p class="hp"><label>Niet invullen <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="field-row">
+          <div class="field">
+            <label for="gb-naam">Naam</label>
+            <input id="gb-naam" type="text" name="naam" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="gb-woonplaats">Woonplaats</label>
+            <input id="gb-woonplaats" type="text" name="woonplaats" autocomplete="address-level2" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="gb-email">E-mailadres</label>
+          <input id="gb-email" type="email" name="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="gb-bericht">Je bericht</label>
+          <textarea id="gb-bericht" name="bericht" rows="5" required></textarea>
+        </div>
+        <label class="check">
+          <input type="checkbox" name="toestemming" value="ja" required />
+          <span>Mijn naam, woonplaats en bericht mogen in het gastenboek op deze website verschijnen.</span>
+        </label>
+        <button class="btn btn-primary" type="submit">Bericht versturen</button>
+      </form>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .list {
+    padding-top: 0;
+  }
+  .masonry {
+    columns: 3 300px;
+    column-gap: 20px;
+  }
+  .entry {
+    break-inside: avoid;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .highlight {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    line-height: 1.3;
+  }
+  .entry p:not(.highlight) {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+  .entry footer {
+    border-top: 1px solid rgb(23 28 18 / 10%);
+    padding-top: 14px;
+    font-size: 0.9rem;
+  }
+  .entry footer span {
+    color: var(--muted);
+  }
+  .entry time {
+    display: block;
+    color: var(--khaki-deep);
+    font-size: 0.82rem;
+    margin-top: 2px;
+  }
+  .write {
+    background: var(--sage);
+  }
+  .write-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: start;
+  }
+  .write-grid > div {
+    position: sticky;
+    top: 110px;
+  }
+  @media (max-width: 860px) {
+    .write-grid {
+      grid-template-columns: 1fr;
+    }
+    .write-grid > div {
+      position: static;
+    }
+  }
+</style>

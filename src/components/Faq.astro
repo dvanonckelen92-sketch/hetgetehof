@@ -1,0 +1,77 @@
+---
+import type { Vraag } from '../data/faq';
+interface Props {
+  vragen: Vraag[];
+}
+const { vragen } = Astro.props;
+---
+
+<div class="faq">
+  {
+    vragen.map((q, i) => (
+      <details open={i === 0}>
+        <summary>
+          <h3>{q.v}</h3>
+          <span class="plus" aria-hidden="true" />
+        </summary>
+        <p>{q.a}</p>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    border-top: 1px solid rgb(23 28 18 / 14%);
+  }
+  details {
+    border-bottom: 1px solid rgb(23 28 18 / 14%);
+  }
+  summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 22px 0;
+    cursor: pointer;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  h3 {
+    margin: 0;
+    font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  }
+  .plus {
+    position: relative;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgb(23 28 18 / 25%);
+  }
+  .plus::before,
+  .plus::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 1.5px;
+    background: var(--ink);
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s ease;
+  }
+  .plus::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  details[open] .plus::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  details p {
+    max-width: 70ch;
+    color: var(--ink-soft);
+    padding-bottom: 12px;
+  }
+</style>
